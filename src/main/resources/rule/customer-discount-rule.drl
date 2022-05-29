@@ -1,0 +1,38 @@
+import com.skptech.drools.demo.model.OrderRequest;
+import com.skptech.drools.demo.model.CustomerType;
+
+global com.skptech.drools.demo.model.OrderDiscount orderDiscount;
+
+dialect "mvel"
+
+rule "Age Based Discount"
+    when
+        OrderRequest(age < 20 || age > 50)
+    then
+        System.out.println("==========Adding 10% discount for Kids/ senior customer=============");
+        orderDiscount.setDiscount(orderDiscount.getDiscount() + 10);
+end
+
+rule "Customer Type Based Discount - Loyal Customer"
+    when
+        OrderRequest(customerType == "LOYAL")
+    then
+        System.out.println("==========Adding 5% discount for LOYAL customer=============");
+        orderDiscount.setDiscount(orderDiscount.getDiscount() + 5);
+end
+
+rule "Customer Type Based Discount - Other Customer"
+    when
+        OrderRequest(customerType != "LOYAL")
+    then
+         System.out.println("==========Adding 3% discount for NEW or DISSATISFIED customer=============");
+        orderDiscount.setDiscount(orderDiscount.getDiscount() + 3);
+end
+
+rule "Amount Based Discount"
+    when
+        OrderRequest(amount > 1000)
+    then
+        System.out.println("==========Adding 5% discount for amount more than 1000$=============");
+        orderDiscount.setDiscount(orderDiscount.getDiscount() + 5);
+end
